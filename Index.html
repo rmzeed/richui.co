@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Richu Michael</title>
+<meta name="description" content="Richu Michael — product designer in Bangalore. A small workspace, slowly opening." />
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@300,400,500,600&f[]=gambarino@400,400i&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Neutral mid-greys only — no blacks, no temperature lean */
+    --bg: #fafafa;
+    --bg-tint: #f3f3f3;
+    --grey-1: #3a3a3a;   /* strongest emphasis — used sparingly */
+    --grey-2: #4a4a4a;   /* headline */
+    --grey-3: #5a5a5a;   /* body emphasis */
+    --grey-4: #6e6e6e;   /* body */
+    --grey-5: #8a8a8a;   /* meta, labels */
+    --grey-6: #a8a8a8;   /* faint */
+    --grey-7: #c8c8c8;   /* very faint */
+    --rule: #e6e6e6;
+    --rule-soft: #efefef;
+
+    /* One accent — used in two places total */
+    --warm: #b86a3f;
+
+    /* Easing language */
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Type scale */
+    --t-mini: 10.5px;
+    --t-xs: 12.5px;
+    --t-sm: 14px;
+    --t-base: 16px;
+    --t-md: 18px;
+    --t-hero: clamp(34px, 5vw, 54px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--grey-4);
+    font-family: 'Switzer', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.55;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  a { cursor: none; }
+
+  /* Custom cursor */
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 50%;
+    will-change: transform;
+    opacity: 0;
+  }
+
+  .cursor-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--grey-1);
+    margin: -2px 0 0 -2px;
+    transition: opacity 200ms var(--ease-soft);
+  }
+
+  .cursor-ring {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--grey-5);
+    margin: -13px 0 0 -13px;
+    transition:
+      width 380ms var(--ease-smooth),
+      height 380ms var(--ease-smooth),
+      margin 380ms var(--ease-smooth),
+      border-color 280ms var(--ease-smooth),
+      background-color 280ms var(--ease-smooth),
+      opacity 200ms var(--ease-soft);
+  }
+
+  .cursor-ring.is-hovering {
+    width: 48px;
+    height: 48px;
+    margin: -24px 0 0 -24px;
+    border-color: var(--grey-3);
+    background: rgba(90, 90, 90, 0.04);
+  }
+
+  .cursor-ring.is-pressing {
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    body, a { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none; }
+  }
+
+  /* Topbar */
+  .topbar {
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sig {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+    color: var(--grey-2);
+    transition: opacity 280ms var(--ease-smooth);
+  }
+
+  .sig:hover { opacity: 0.65; }
+
+  .sig-glyph {
+    width: 18px;
+    height: 14px;
+    flex-shrink: 0;
+    color: var(--grey-2);
+  }
+
+  .sig-glyph .sun {
+    transform-origin: 9px 7px;
+    animation: sunBreath 7s ease-in-out infinite;
+  }
+
+  @keyframes sunBreath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  .sig-name {
+    font-family: 'Gambarino', serif;
+    font-style: italic;
+    font-size: 21px;
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    line-height: 1;
+    padding-top: 1px;
+  }
+
+  /* Status — time-of-day, quieter now */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--t-xs);
+    color: var(--grey-5);
+    letter-spacing: -0.005em;
+    font-weight: 400;
+  }
+
+  .status-orb {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c8b89c, #8a7a5c);
+    transition: background 600ms var(--ease-smooth);
+  }
+
+  .status-time {
+    color: var(--grey-3);
+    font-weight: 450;
+  }
+
+  /* Main */
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8vh 40px;
+  }
+
+  .wrap {
+    max-width: 680px;
+    width: 100%;
+  }
+
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--t-mini);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--grey-5);
+    margin-bottom: 44px;
+  }
+
+  .label-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--grey-6);
+  }
+
+  h1 {
+    font-family: 'Switzer', sans-serif;
+    font-size: var(--t-hero);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.024em;
+    color: var(--grey-2);
+    margin-bottom: 36px;
+    max-width: 20ch;
+  }
+
+  h1 em {
+    font-family: 'Gambarino', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    color: var(--grey-2);
+    padding: 0 0.04em;
+  }
+
+  .intro {
+    font-size: var(--t-md);
+    line-height: 1.62;
+    color: var(--grey-3);
+    max-width: 54ch;
+    margin-bottom: 56px;
+    font-weight: 400;
+    letter-spacing: -0.003em;
+  }
+
+  .intro em {
+    font-style: italic;
+    color: var(--grey-2);
+  }
+
+  /* Meta grid */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 44px;
+    padding-top: 40px;
+    border-top: 1px solid var(--rule);
+    margin-bottom: 52px;
+  }
+
+  .meta h3 {
+    font-size: var(--t-mini);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--grey-5);
+    margin-bottom: 14px;
+  }
+
+  .meta p {
+    font-size: var(--t-sm);
+    color: var(--grey-3);
+    line-height: 1.55;
+    font-weight: 400;
+    letter-spacing: -0.003em;
+  }
+
+  /* Inline link with animated underline */
+  .link-inline {
+    color: var(--grey-2);
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    font-weight: 450;
+    padding-bottom: 1px;
+  }
+
+  .link-inline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--grey-4);
+    transform-origin: left center;
+    transition: transform 480ms var(--ease-smooth);
+  }
+
+  .link-inline:hover::after {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+
+  .link-inline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--grey-2);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 480ms var(--ease-smooth) 80ms;
+  }
+
+  .link-inline:hover::before {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 22px 13px 24px;
+    font-size: var(--t-sm);
+    font-weight: 500;
+    border-radius: 999px;
+    text-decoration: none;
+    letter-spacing: -0.005em;
+    transition:
+      background-color 320ms var(--ease-smooth),
+      color 320ms var(--ease-smooth),
+      border-color 320ms var(--ease-smooth);
+    cursor: none;
+    position: relative;
+  }
+
+  .btn-primary {
+    background: var(--grey-2);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: var(--grey-1);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--grey-2);
+    border: 1px solid var(--rule);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--grey-4);
+  }
+
+  .btn-arrow {
+    display: inline-block;
+    transition: transform 380ms var(--ease-smooth);
+  }
+
+  .btn:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  /* Footer */
+  footer {
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--t-xs);
+    color: var(--grey-5);
+    flex-wrap: wrap;
+    gap: 12px;
+    letter-spacing: -0.005em;
+  }
+
+  .footer-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-mark::before {
+    content: '';
+    width: 12px;
+    height: 1px;
+    background: var(--grey-6);
+  }
+
+  /* Reveal */
+  .wrap > * {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: rise 900ms var(--ease-smooth) forwards;
+  }
+
+  .wrap > *:nth-child(1) { animation-delay: 80ms; }
+  .wrap > *:nth-child(2) { animation-delay: 200ms; }
+  .wrap > *:nth-child(3) { animation-delay: 320ms; }
+  .wrap > *:nth-child(4) { animation-delay: 440ms; }
+  .wrap > *:nth-child(5) { animation-delay: 560ms; }
+
+  .topbar {
+    opacity: 0;
+    animation: rise 800ms var(--ease-smooth) forwards;
+  }
+
+  footer {
+    opacity: 0;
+    animation: rise 800ms var(--ease-smooth) 700ms forwards;
+  }
+
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile */
+  @media (max-width: 680px) {
+    .topbar { padding: 20px 22px; }
+    main { padding: 6vh 22px; }
+    h1 { font-size: clamp(28px, 7vw, 38px); margin-bottom: 26px; }
+    .intro { font-size: 16.5px; margin-bottom: 44px; }
+    .meta-grid { grid-template-columns: 1fr; gap: 28px; padding-top: 32px; margin-bottom: 40px; }
+    footer { padding: 20px 22px; }
+    .sig-name { font-size: 19px; }
+    .status-time { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    .wrap > *, .topbar, footer { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a href="/" class="sig" data-cursor="hover">
+      <svg class="sig-glyph" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle class="sun" cx="9" cy="7" r="2.6" fill="currentColor"/>
+        <line x1="0.5" y1="10.5" x2="17.5" y2="10.5" stroke="currentColor" stroke-width="0.9" stroke-linecap="round"/>
+      </svg>
+      <span class="sig-name">richu</span>
+    </a>
+    <span class="status">
+      <span class="status-orb" aria-hidden="true"></span>
+      <span>Slowly opening, <span class="status-time">in the morning</span></span>
+    </span>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="label">
+        <span>richui.co</span>
+        <span class="label-dot"></span>
+        <span>still putting it together</span>
+      </div>
+
+      <h1>A small workspace for <em>the work,</em> and a few thoughts I'd be glad to share with you.</h1>
+
+      <p class="intro">
+        I'm Richu — a product designer in Bangalore, working at CRED. Spending some quiet time arranging the work I've been part of, the questions it left me with, and a few things I keep coming back to. <em>Less of a gallery, more of a workshop.</em> Closer to a place you'd walk into and start talking, than a place to look around.
+      </p>
+
+      <div class="meta-grid">
+        <div class="meta">
+          <h3>Lately thinking about</h3>
+          <p>How alerts can be calm instead of urgent. How a flight time can feel like a sky. How payment screens can stop punishing people for being late.</p>
+        </div>
+        <div class="meta">
+          <h3>Working at</h3>
+          <p>CRED — credit, payments, score products. Bangalore, mostly.</p>
+        </div>
+        <div class="meta">
+          <h3>Reachable at</h3>
+          <p><a href="mailto:hello@richui.co" class="link-inline" data-cursor="hover">hello@richui.co</a></p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a href="mailto:hello@richui.co" class="btn btn-primary" data-cursor="hover">
+          Say hello
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://read.cv/richumichael" class="btn btn-secondary" data-cursor="hover">
+          Read.cv
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-mark">Richu Michael, 2026</span>
+    <span>A workshop, slowly · richui.co</span>
+  </footer>
+
+  <script>
+    (function() {
+      const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      if (isTouch) return;
+
+      const dot = document.querySelector('.cursor-dot');
+      const ring = document.querySelector('.cursor-ring');
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let ringX = mouseX;
+      let ringY = mouseY;
+      let cursorVisible = false;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        if (!cursorVisible) {
+          dot.style.opacity = '1';
+          ring.style.opacity = '1';
+          cursorVisible = true;
+        }
+      });
+
+      document.addEventListener('mouseleave', () => {
+        dot.style.opacity = '0';
+        ring.style.opacity = '0';
+        cursorVisible = false;
+      });
+
+      document.addEventListener('mousedown', () => ring.classList.add('is-pressing'));
+      document.addEventListener('mouseup', () => ring.classList.remove('is-pressing'));
+
+      function tick() {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      document.querySelectorAll('[data-cursor="hover"]').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('is-hovering'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('is-hovering'));
+      });
+
+      // Time-of-day — quieter, all greys with the warm orb shifting subtly
+      function getTimeContext() {
+        const h = new Date().getHours();
+        if (h >= 5 && h < 8)   return { grad: ['#d4b8a0', '#a89880'], label: 'at dawn' };
+        if (h >= 8 && h < 12)  return { grad: ['#c8c4b8', '#9a9690'], label: 'in the morning' };
+        if (h >= 12 && h < 16) return { grad: ['#b8b8b0', '#888880'], label: 'in the afternoon' };
+        if (h >= 16 && h < 19) return { grad: ['#c8a890', '#8a6e58'], label: 'at sunset' };
+        if (h >= 19 && h < 22) return { grad: ['#9890a0', '#5a5868'], label: 'in the evening' };
+        return { grad: ['#5a5a68', '#2e2e38'], label: 'at night' };
+      }
+
+      const ctx = getTimeContext();
+      const orb = document.querySelector('.status-orb');
+      const timeLabel = document.querySelector('.status-time');
+      if (orb) orb.style.background = `linear-gradient(135deg, ${ctx.grad[0]}, ${ctx.grad[1]})`;
+      if (timeLabel) timeLabel.textContent = ctx.label;
+    })();
+  </script>
+</body>
+</html>
